@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <q-header elevated class="header-border-top bg-white">
+    <!-- <q-header elevated class="header-border-top bg-white">
       <div class="container">
         <q-toolbar style="padding-top: 10px; margin">
           <q-toolbar-title style="width:260px">
@@ -32,7 +32,7 @@
           />
         </q-toolbar>
       </div>
-    </q-header>
+    </q-header> -->
 
     <!-- <q-drawer
       v-model="leftDrawerOpen"

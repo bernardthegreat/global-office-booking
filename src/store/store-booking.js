@@ -1,24 +1,37 @@
 const state = {
   apiUrl: process.env.API_URL,
-  availableSlots: [
-    {
-      from: '08:00',
-      to: '08:30',
-      status: 'taken'
-    }
-  ]
+  loading: null,
+  hourlyBookings: []
 }
 
 const mutations = {
+  setHourlyBookings (state, bookings) {
+    state.hourlyBookings = bookings
+  }
 }
 
 const actions = {
+  async getHourlyBookings (state, date) {
+    const bookings = await fetch(
+      `${this.state.booking.apiUrl}/get-hourly-bookings.php?book_date=${date}`,
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      }
+    ).then((response) => response.json())
 
+    if (bookings.length > 0) {
+      state.commit('setHourlyBookings', bookings)
+    }
+  }
 }
 
 const getters = {
-  availableSlots (state) {
-    return state.availableSlots
+  getHourlyBookings (state) {
+    return state.hourlyBookings
+  },
+  loading (state) {
+    return state.loading
   }
 }
 

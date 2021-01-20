@@ -9,7 +9,7 @@
         </q-card-section>
         <q-card-section>
           <div class="q-pa-md" style="max-width: 340px">
-            <q-input filled v-model="date">
+            <q-input filled v-model="date" readonly >
               <template v-slot:prepend>
                 <q-icon name="event" class="cursor-pointer">
                   <q-popup-proxy transition-show="scale" transition-hide="scale">
@@ -29,7 +29,7 @@
           </div>
         </q-card-section>
         <q-card-actions align="center">
-          <q-btn class="full-width" color="primary">CHECK AVAILABILITY
+          <q-btn class="full-width" color="primary" @click="getHourlyBookings()">CHECK AVAILABILITY
             <q-tooltip
               transition-show="rotate"
               transition-hide="rotate"
@@ -39,7 +39,7 @@
       </q-card>
     </div>
     <div class="col-lg-8 col-sm-12 col-xs-12 q-pa-md">
-      <available-slots :date="date"></available-slots>
+      <available-slots :date="date" :showSlots="showSlots" :showLoading="showLoading"></available-slots>
     </div>
   </div>
 </template>
@@ -47,12 +47,18 @@
 <script>
 import { date } from 'quasar'
 import AvailableSlots from './AvailableSlots.vue'
+import { mapGetters } from 'vuex'
 export default {
   components: { AvailableSlots },
   data () {
     return {
-      date: ''
+      date: '',
+      showLoading: false,
+      showSlots: false
     }
+  },
+  computed: {
+    ...mapGetters(['loading'])
   },
   created () {
     this.formatDates()
@@ -64,6 +70,15 @@ export default {
     formatDates () {
       const dateNow = new Date().toISOString().substring(0, 10)
       this.date = dateNow
+    },
+    async getHourlyBookings () {
+      this.showLoading = true
+      this.showSlots = false
+      await this.$store.dispatch('getHourlyBookings', this.date)
+      setTimeout(() => {
+        this.showLoading = false
+        this.showSlots = true
+      }, 3000)
     }
   }
 }

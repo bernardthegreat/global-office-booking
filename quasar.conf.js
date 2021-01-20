@@ -45,7 +45,7 @@ module.exports = function (/* ctx */) {
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
       env: {
-        API_URL: 'http://global-office.ca/'
+        API_URL: 'http://global-office.ca'
       },
       vueRouterMode: 'hash', // available values: 'hash', 'history'
 

@@ -6,56 +6,71 @@
             SLOTS
           </div>
         </q-card-section>
-        <q-card-section>
-          <q-input filled v-model="overallTime">
-              <template v-slot:prepend>
-                <q-icon name="access_time" class="cursor-pointer">
-                  <q-popup-proxy transition-show="scale" transition-hide="scale">
-                    <q-time
-                      v-model="timeFrom"
-                      :minute-options="officeTimeFromMinutes"
-                    >
-                      <div class="row items-center justify-end">
-                        <q-btn v-close-popup label="Close" color="primary" flat />
-                      </div>
-                    </q-time>
-                  </q-popup-proxy>
-                  <q-tooltip
-                    transition-show="rotate"
-                    transition-hide="rotate"
-                  >From Time</q-tooltip>
-                </q-icon>
-              </template>
-              <template v-slot:append>
-                <q-icon name="access_time" class="cursor-pointer">
-                  <q-popup-proxy transition-show="scale" transition-hide="scale">
-                    <q-time
-                      v-model="timeTo"
-                      :minute-options="officeTimeToMinutes"
-                    >
-                      <div class="row items-center justify-end">
-                        <q-btn v-close-popup label="Close" color="primary" flat />
-                      </div>
-                    </q-time>
-                  </q-popup-proxy>
-                  <q-tooltip
-                    transition-show="rotate"
-                    transition-hide="rotate"
-                  >To Time</q-tooltip>
-                </q-icon>
-              </template>
-            </q-input>
+        <q-card-section class="q-mt-md" v-if="showLoading">
+          <q-inner-loading :showing="showLoading">
+            <q-spinner-gears size="50px" color="primary" />
+          </q-inner-loading>
         </q-card-section>
-        <q-card-actions>
-          <div class="q-pt-sm" v-show="displayError" style="width: 740px">
-            <q-banner inline-actions class="text-white bg-red">
-              <template v-slot:avatar>
-                <q-icon name="error" color="white" />
-              </template>
-              PLEASE ENTER A VALID TIME
-            </q-banner>
-          </div>
-        </q-card-actions>
+          <transition
+            appear
+            enter-active-class="animated fadeIn"
+            leave-active-class="animated fadeOut"
+          >
+            <q-card-section>
+              <div v-show="showSlots">
+                <q-card-section>
+                  <q-input filled v-model="overallTime">
+                      <template v-slot:prepend>
+                        <q-icon name="access_time" class="cursor-pointer">
+                          <q-popup-proxy transition-show="scale" transition-hide="scale">
+                            <q-time
+                              v-model="timeFrom"
+                              :minute-options="officeTimeFromMinutes"
+                            >
+                              <div class="row items-center justify-end">
+                                <q-btn v-close-popup label="Close" color="primary" flat />
+                              </div>
+                            </q-time>
+                          </q-popup-proxy>
+                          <q-tooltip
+                            transition-show="rotate"
+                            transition-hide="rotate"
+                          >From Time</q-tooltip>
+                        </q-icon>
+                      </template>
+                      <template v-slot:append>
+                        <q-icon name="access_time" class="cursor-pointer">
+                          <q-popup-proxy transition-show="scale" transition-hide="scale">
+                            <q-time
+                              v-model="timeTo"
+                              :minute-options="officeTimeToMinutes"
+                            >
+                              <div class="row items-center justify-end">
+                                <q-btn v-close-popup label="Close" color="primary" flat />
+                              </div>
+                            </q-time>
+                          </q-popup-proxy>
+                          <q-tooltip
+                            transition-show="rotate"
+                            transition-hide="rotate"
+                          >To Time</q-tooltip>
+                        </q-icon>
+                      </template>
+                    </q-input>
+                </q-card-section>
+                <q-card-actions>
+                  <div class="q-pt-sm" v-show="displayError" style="width: 740px">
+                    <q-banner inline-actions class="text-white bg-red">
+                      <template v-slot:avatar>
+                        <q-icon name="error" color="white" />
+                      </template>
+                      PLEASE ENTER A VALID TIME
+                    </q-banner>
+                  </div>
+                </q-card-actions>
+              </div>
+            </q-card-section>
+          </transition>
       </q-card>
   </div>
 </template>
@@ -64,7 +79,9 @@
 import { mapGetters } from 'vuex'
 export default {
   props: [
-    'date'
+    'date',
+    'showSlots',
+    'showLoading'
   ],
   computed: {
     ...mapGetters(['availableSlots'])
