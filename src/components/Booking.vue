@@ -29,7 +29,7 @@
           </div>
         </q-card-section>
         <q-card-actions align="center">
-          <q-btn class="full-width" color="primary" @click="getHourlyBookings()">CHECK AVAILABILITY
+          <q-btn class="full-width" color="primary" push @click="getHourlyBookings()">CHECK AVAILABILITY
             <q-tooltip
               transition-show="rotate"
               transition-hide="rotate"
@@ -78,7 +78,7 @@ export default {
       setTimeout(() => {
         this.showLoading = false
         this.showSlots = true
-      }, 3000)
+      }, 2000)
     }
   }
 }

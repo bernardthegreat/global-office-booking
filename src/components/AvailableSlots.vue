@@ -16,60 +16,114 @@
             enter-active-class="animated fadeIn"
             leave-active-class="animated fadeOut"
           >
-            <q-card-section>
-              <div v-show="showSlots">
-                <q-card-section>
-                  <q-input filled v-model="overallTime">
-                      <template v-slot:prepend>
-                        <q-icon name="access_time" class="cursor-pointer">
-                          <q-popup-proxy transition-show="scale" transition-hide="scale">
-                            <q-time
-                              v-model="timeFrom"
-                              :minute-options="officeTimeFromMinutes"
-                            >
-                              <div class="row items-center justify-end">
-                                <q-btn v-close-popup label="Close" color="primary" flat />
-                              </div>
-                            </q-time>
-                          </q-popup-proxy>
-                          <q-tooltip
-                            transition-show="rotate"
-                            transition-hide="rotate"
-                          >From Time</q-tooltip>
-                        </q-icon>
-                      </template>
-                      <template v-slot:append>
-                        <q-icon name="access_time" class="cursor-pointer">
-                          <q-popup-proxy transition-show="scale" transition-hide="scale">
-                            <q-time
-                              v-model="timeTo"
-                              :minute-options="officeTimeToMinutes"
-                            >
-                              <div class="row items-center justify-end">
-                                <q-btn v-close-popup label="Close" color="primary" flat />
-                              </div>
-                            </q-time>
-                          </q-popup-proxy>
-                          <q-tooltip
-                            transition-show="rotate"
-                            transition-hide="rotate"
-                          >To Time</q-tooltip>
-                        </q-icon>
-                      </template>
-                    </q-input>
-                </q-card-section>
-                <q-card-actions>
-                  <div class="q-pt-sm" v-show="displayError" style="width: 740px">
-                    <q-banner inline-actions class="text-white bg-red">
-                      <template v-slot:avatar>
-                        <q-icon name="error" color="white" />
-                      </template>
-                      PLEASE ENTER A VALID TIME
-                    </q-banner>
+            <div>
+              <q-card-section v-show="showSlots">
+                <div class="row justify-center">
+                  <div class="col-lg-12 text-h6" align="center">
+                    Taken Slots
                   </div>
-                </q-card-actions>
-              </div>
-            </q-card-section>
+                  <div class="col-lg-6"
+                    v-for="bookings in hourlyBookingsTaken"
+                    :key="bookings.id"
+                  >
+                    <q-card
+                      class="q-ma-sm bg-primary text-white"
+                    >
+                      <q-card-section>
+                        <div class="text-h6">
+                          {{bookings.book_from}} - {{bookings.book_to}}
+                        </div>
+                      </q-card-section>
+                    </q-card>
+                  </div>
+
+                  <div class="col-lg-12 text-h6 q-pt-md" align="center">
+                    Available Slots
+                  </div>
+                  <div class="col-lg-6"
+                    v-for="bookings in hourlyBookingsAvailable"
+                    :key="bookings.id"
+                  >
+                    <q-card
+                      class="q-ma-sm bg-secondary text-white"
+                    >
+                      <q-card-section>
+                        <div class="text-h6">
+                          {{bookings.book_from}} - {{bookings.book_to}}
+                        </div>
+                      </q-card-section>
+                    </q-card>
+                  </div>
+                </div>
+              </q-card-section>
+              <q-card-section>
+                <div v-show="showSlots">
+                  <q-card-section>
+                    <div class="flex flex-center">
+                      <div class="q-pa-md">
+                        <q-input filled v-model="overallTime">
+                          <template v-slot:prepend>
+                            <q-icon name="access_time" class="cursor-pointer">
+                              <q-popup-proxy transition-show="scale" transition-hide="scale">
+                                <q-time
+                                  v-model="timeFrom"
+                                  :minute-options="officeTimeFromMinutes"
+                                >
+                                  <div class="row items-center justify-end">
+                                    <q-btn v-close-popup label="Close" color="primary" flat />
+                                  </div>
+                                </q-time>
+                              </q-popup-proxy>
+                              <q-tooltip
+                                transition-show="rotate"
+                                transition-hide="rotate"
+                              >From Time</q-tooltip>
+                            </q-icon>
+                          </template>
+                          <template v-slot:append>
+                            <q-icon name="access_time" class="cursor-pointer">
+                              <q-popup-proxy transition-show="scale" transition-hide="scale">
+                                <q-time
+                                  v-model="timeTo"
+                                  :minute-options="officeTimeToMinutes"
+                                >
+                                  <div class="row items-center justify-end">
+                                    <q-btn v-close-popup label="Close" color="primary" flat />
+                                  </div>
+                                </q-time>
+                              </q-popup-proxy>
+                              <q-tooltip
+                                transition-show="rotate"
+                                transition-hide="rotate"
+                              >To Time</q-tooltip>
+                            </q-icon>
+                          </template>
+                        </q-input>
+                      </div>
+                      <div class="q-pa-md">
+                        <q-btn color="primary" push>
+                          BOOK
+                          <q-tooltip
+                            transition-show="rotate"
+                            transition-hide="rotate"
+                          >BOOK HOURLY RENTALS</q-tooltip>
+                        </q-btn>
+                      </div>
+                    </div>
+                  </q-card-section>
+                  <q-card-actions>
+                    <div class="q-pt-sm" v-show="displayError" style="width: 740px">
+                      <q-banner inline-actions class="text-white bg-red">
+                        <template v-slot:avatar>
+                          <q-icon name="error" color="white" />
+                        </template>
+                        PLEASE ENTER A VALID TIME
+                      </q-banner>
+                    </div>
+                  </q-card-actions>
+                </div>
+              </q-card-section>
+            </div>
           </transition>
       </q-card>
   </div>
@@ -84,7 +138,10 @@ export default {
     'showLoading'
   ],
   computed: {
-    ...mapGetters(['availableSlots'])
+    ...mapGetters([
+      'hourlyBookingsAvailable',
+      'hourlyBookingsTaken'
+    ])
   },
   data () {
     return {
@@ -130,3 +187,9 @@ export default {
   }
 }
 </script>
+
+<style lang="sass" scoped>
+.card-slot
+  height: 290px
+  width: 290px
+</style>
