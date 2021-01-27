@@ -103,7 +103,7 @@ const actions = {
   async getHourlyBookings (state, date) {
     try {
       var takenBookings = await fetch(
-        `${this.state.booking.apiUrl}/get-hourly-bookings.php?book_date=2021-01-26`,
+        `${this.state.booking.apiUrl}/get-hourly-bookings.php?book_date=${date}`,
         {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
