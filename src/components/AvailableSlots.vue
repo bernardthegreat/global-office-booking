@@ -256,24 +256,39 @@ export default {
 
           const timeFrom = splittedTime[0]
           const timeTo = splittedTime[1]
-
+          // console.log(computedTimeFrom, 'computedTimeFrom')
+          // console.log(computedBookingsTimeFrom, 'computedBookingsTimeFrom')
+          // console.log(computedTimeTo, 'computedTimeTo')
+          // console.log(computedBookingsTimeTo, 'computedBookingsTimeTo')
           if (val.book_from > val.book_to) val.book_from += 0
-          if ((computedTimeFrom >= computedBookingsTimeFrom) && (computedTimeTo <= computedBookingsTimeTo)) {
+          if ((computedTimeFrom >= computedBookingsTimeFrom && computedTimeTo <= computedBookingsTimeTo)) {
+            // console.log('pasok1')
             this.disableButton = true
             this.displayError = true
             this.showPaypalButtons = false
             this.timeError = `${timeFrom} - ${timeTo} CONFLICTS WITH ANOTHER SLOT. PLEASE SELECT ANOTHER TIME`
-          } else if ((computedTimeTo > computedBookingsTimeFrom) && (computedTimeTo >= computedBookingsTimeTo)) {
-            this.disableButton = true
-            this.displayError = true
-            this.showPaypalButtons = false
-            this.timeError = `${timeFrom} - ${timeTo} CONFLICTS WITH ANOTHER SLOT. PLEASE SELECT ANOTHER TIME`
-          } else if ((computedTimeFrom > computedBookingsTimeFrom) && (computedTimeTo > computedBookingsTimeTo)) {
-            this.disableButton = true
-            this.displayError = true
-            this.showPaypalButtons = false
-            this.timeError = `${timeFrom} - ${timeTo} CONFLICTS WITH ANOTHER SLOT. PLEASE SELECT ANOTHER TIME`
+          } else if ((computedTimeTo >= computedBookingsTimeTo)) {
+            if (computedTimeFrom <= computedBookingsTimeFrom) {
+              // console.log('pasok2')
+              this.disableButton = true
+              this.displayError = true
+              this.showPaypalButtons = false
+              this.timeError = `${timeFrom} - ${timeTo} CONFLICTS WITH ANOTHER SLOT. PLEASE SELECT ANOTHER TIME`
+            }
           }
+          // else if ((computedTimeTo > computedBookingsTimeFrom) && (computedTimeTo <= computedBookingsTimeTo)) {
+          //   console.log('pasok2')
+          //   this.disableButton = true
+          //   this.displayError = true
+          //   this.showPaypalButtons = false
+          //   this.timeError = `${timeFrom} - ${timeTo} CONFLICTS WITH ANOTHER SLOT. PLEASE SELECT ANOTHER TIME`
+          // } else if ((computedTimeFrom >= computedBookingsTimeFrom) && (computedTimeTo <= computedBookingsTimeTo)) {
+          //   console.log('pasok3')
+          //   this.disableButton = true
+          //   this.displayError = true
+          //   this.showPaypalButtons = false
+          //   this.timeError = `${timeFrom} - ${timeTo} CONFLICTS WITH ANOTHER SLOT. PLEASE SELECT ANOTHER TIME`
+          // }
         })
 
         const orderQty = minutes / 60
