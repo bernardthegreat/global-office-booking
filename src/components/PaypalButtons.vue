@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="q-mt-md">
+    <div id="paypal-buttons" ref="paypalButtons" class="q-mt-md paypal-buttons">
       <q-card>
         <q-card-section align="center" class="bg-primary text-white">
           <div class="text-h5">
@@ -35,7 +35,7 @@
             </tbody>
           </table>
         </q-card-section>
-        <q-card-section>
+        <q-card-section align="center">
           <div class="q-mt-md" id="paypal-button-container"></div>
         </q-card-section>
       </q-card>
@@ -107,6 +107,17 @@ function executePaypal (summary) {
     }
   }).render('#paypal-button-container')
 }
+// import { scroll } from 'quasar'
+// const { getScrollTarget } = scroll
+// eslint-disable-next-line no-undef
+// function scrollToElement (el) {
+//   console.log(el, 'el')
+//   const target = getScrollTarget(el)
+//   const offset = el.offsetTop
+//   console.log(target, offset)
+//   // const duration = 1000
+//   // setScrollPosition(target, offset, duration)
+// }
 
 import { mapGetters } from 'vuex'
 export default {
@@ -134,6 +145,8 @@ export default {
     paypalBreakdownVisibility (val) {
       if (val) {
         this.paypal()
+        const el = this.$refs.paypalButtons
+        window.scrollTo(0, el.scrollHeight)
       }
     },
     async paymentDetails (val) {

@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-lg-4 col-sm-12 col-xs-12 q-pa-md">
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 q-pa-md">
       <q-card>
         <q-card-section align="center" class="bg-primary text-white">
           <div class="text-h5">
@@ -8,7 +8,7 @@
           </div>
         </q-card-section>
         <q-card-section>
-          <div class="q-pa-md" style="max-width: 340px">
+          <div class="q-pa-md">
             <q-input filled v-model="date" readonly >
               <template v-slot:prepend>
                 <q-icon name="event" class="cursor-pointer">
@@ -38,7 +38,7 @@
         </q-card-actions>
       </q-card>
     </div>
-    <div class="col-lg-8 col-sm-12 col-xs-12 q-pa-md">
+    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 q-pa-md">
       <available-slots :date="date" :showSlots="showSlots" :showLoading="showLoading"></available-slots>
       <paypal-buttons v-show="paypalBreakdownVisibility"></paypal-buttons>
     </div>

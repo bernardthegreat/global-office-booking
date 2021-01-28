@@ -7,11 +7,6 @@
             SLOTS
           </div>
         </q-card-section>
-        <q-card-section>
-          <div class='text-h5' align='center'>
-            AVAILABLE AND TAKEN SLOTS FOR HOURLY RENTALS
-          </div>
-        </q-card-section>
         <q-card-section class='q-mt-md' v-if='showLoading'>
           <q-inner-loading :showing='showLoading == true'>
             <q-spinner-gears size='100px' color='primary' />
