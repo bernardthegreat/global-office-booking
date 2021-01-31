@@ -2,14 +2,12 @@ import moment from 'moment'
 const state = {
   apiUrl: process.env.API_URL,
   hourlyBookings: [],
-  paypalBreakdownVisibility: false,
   bookingCost: '20.00',
   hourlyBookingsAvailable: [],
   hourlyBookingsTaken: [],
   orderSummary: [],
   paymentStatusSuccess: '',
-  overallTime: '',
-  paypalDialog: false
+  overallTime: ''
 }
 
 const mutations = {
@@ -86,10 +84,6 @@ const mutations = {
   setPaymentStatus (state, status) {
     state.paymentStatusSuccess = status
   },
-  displayPaypalBreakdown (state, display) {
-    state.paypalBreakdownVisibility = display
-    state.paypalDialog = display
-  },
   closePaypalDialog (state, status) {
     state.paypalDialog = status
   },
@@ -129,9 +123,6 @@ const actions = {
   getOrderSummary (state, order) {
     state.commit('setOrderSummary', order)
   },
-  async displayPaypalBreakdown (state, status) {
-    state.commit('displayPaypalBreakdown', status)
-  },
   async setOverallTime (state, time) {
     state.commit('setOverallTime', time)
   },
@@ -164,9 +155,6 @@ const getters = {
   hourlyBookingsTaken (state) {
     return state.hourlyBookingsTaken
   },
-  paypalBreakdownVisibility (state) {
-    return state.paypalBreakdownVisibility
-  },
   orderSummary (state) {
     return state.orderSummary
   },
@@ -175,9 +163,6 @@ const getters = {
   },
   overallTime (state) {
     return state.overallTime
-  },
-  paypalDialog (state) {
-    return state.paypalDialog
   }
 }
 

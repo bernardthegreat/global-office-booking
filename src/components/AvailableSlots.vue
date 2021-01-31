@@ -146,15 +146,20 @@
         </vue-recaptcha>
       </q-card>
     </form>
+    <q-dialog v-model="paypalDialog" persistent transition-show="scale" transition-hide="scale">
+      <paypal-buttons :paypalDialog="paypalDialog"></paypal-buttons>
+    </q-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import VueRecaptcha from 'vue-recaptcha'
+import PaypalButtons from './PaypalButtons.vue'
 export default {
   components: {
-    VueRecaptcha
+    VueRecaptcha,
+    PaypalButtons
   },
   props: [
     'date',
@@ -191,7 +196,9 @@ export default {
         totalCost: '',
         bookingDate: '',
         bookingTime: ''
-      }
+      },
+      paypalDialog: false,
+      persistent: false
     }
   },
   watch: {
@@ -223,7 +230,7 @@ export default {
       this.showPaypalButtons = true
       this.validateTime()
       if (this.showPaypalButtons) {
-        this.$store.dispatch('displayPaypalBreakdown', true)
+        this.paypalDialog = true
         this.$store.dispatch('getOrderSummary', this.bookingSummary)
       }
     },

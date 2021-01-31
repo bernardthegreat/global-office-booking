@@ -1,51 +1,51 @@
 <template>
-  <div>
-    <div id="paypal-buttons" ref="paypalButtons" class="q-mt-md paypal-buttons">
-      <q-card>
-        <q-card-section align="center" class="bg-primary text-white">
-          <div class="text-h5">
-            ORDER SUMMARY
-          </div>
-        </q-card-section>
-        <q-card-section>
-          <table id="table-order" style="border-collapse:collapse;text-align:center;" width="100%">
-            <thead>
-              <tr>
-                <th>Item Name</th>
-                <th>Cost / Quantity</th>
-                <th>Order Cost</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ orderSummary.name }}</td>
-                <td>{{ orderSummary.itemCostQty }}</td>
-                <td>{{ orderSummary.orderCost }}</td>
-              </tr>
-              <tr>
-                <td>Tax (5%)</td>
-                <td> -- </td>
-                <td>{{ orderSummary.taxCost }}</td>
-              </tr>
-              <tr>
-                <td>TOTAL</td>
-                <td>--</td>
-                <td>{{ orderSummary.totalCost }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </q-card-section>
-        <q-card-section align="center">
-          <div class="q-mt-md" id="paypal-button-container"></div>
-        </q-card-section>
-      </q-card>
-    </div>
+  <div ref="paypalButtons" class="q-mt-md paypal-buttons">
+    <q-card>
+      <q-card-section align="center" class="bg-primary text-white">
+        <div class="text-h5">
+          ORDER SUMMARY
+        </div>
+      </q-card-section>
+      <q-card-section>
+        <table id="table-order" style="border-collapse:collapse;text-align:center;" width="100%">
+          <thead>
+            <tr>
+              <th>Item Name</th>
+              <th>Cost / Quantity</th>
+              <th>Order Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ orderSummary.name }}</td>
+              <td>{{ orderSummary.itemCostQty }}</td>
+              <td>{{ orderSummary.orderCost }}</td>
+            </tr>
+            <tr>
+              <td>Tax (5%)</td>
+              <td> -- </td>
+              <td>{{ orderSummary.taxCost }}</td>
+            </tr>
+            <tr>
+              <td>TOTAL</td>
+              <td>--</td>
+              <td>{{ orderSummary.totalCost }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </q-card-section>
+      <q-card-section align="center" id="try">
+        <div class="q-mt-md paypal-buttons-gana" id="paypal-button-container"></div>
+      </q-card-section>
+      <q-card-actions align="right">
+        <q-btn push color="primary" label="CLOSE" v-close-popup />
+      </q-card-actions>
+    </q-card>
   </div>
 </template>
 
 <script>
 var finalPaymentDetails = []
-
 function executePaypal (summary) {
   // eslint-disable-next-line no-undef
   paypal.Buttons({
@@ -78,7 +78,7 @@ function executePaypal (summary) {
             }
           },
           items: [{
-            name: summary.name + ' (' + (summary.durationInMinutes / 60) + ' hour/s)',
+            name: summary.name + ' (' + (summary.durationInMinutes) + ' hour/s)',
             unit_amount: {
               currency_code: 'CAD',
               value: summary.orderCost.replace('$', '')
@@ -102,53 +102,36 @@ function executePaypal (summary) {
       })
     },
     onError: function (err) {
-      console.log('paymentfailed')
+      console.log('Payment Failed')
       console.log(err)
     }
   }).render('#paypal-button-container')
 }
-// import { scroll } from 'quasar'
-// const { getScrollTarget } = scroll
-// eslint-disable-next-line no-undef
-// function scrollToElement (el) {
-//   console.log(el, 'el')
-//   const target = getScrollTarget(el)
-//   const offset = el.offsetTop
-//   console.log(target, offset)
-//   // const duration = 1000
-//   // setScrollPosition(target, offset, duration)
-// }
 
 import { mapGetters } from 'vuex'
 export default {
+  props: ['paypalDialog'],
   data () {
     return {
       paymentSuccess: false,
       paymentStatus: '',
-      paymentDetails: finalPaymentDetails,
-      dialogPaypal: false
+      paymentDetails: finalPaymentDetails
     }
   },
   mounted () {
     // this.$store.dispatch('getHourlyBookings', this.date)
     // eslint-disable-next-line no-undef
+    if (this.paypalDialog) {
+      executePaypal(this.orderSummary)
+    }
   },
   computed: {
     ...mapGetters([
       'orderSummary',
-      'paypalBreakdownVisibility',
-      'paymentStatusSuccess',
-      'paypalDialog'
+      'paymentStatusSuccess'
     ])
   },
   watch: {
-    paypalBreakdownVisibility (val) {
-      if (val) {
-        this.paypal()
-        const el = this.$refs.paypalButtons
-        window.scrollTo(0, el.scrollHeight)
-      }
-    },
     async paymentDetails (val) {
       if (val.length > 0) {
         await this.$store.dispatch('processPayment', val[0])
@@ -158,24 +141,6 @@ export default {
       if (val) {
         this.$router.push('thank-you')
       }
-    },
-    paypalDialog (val) {
-      if (val) {
-        this.dialogPaypal = true
-      }
-    }
-  },
-  methods: {
-    paypal () {
-      if (this.paypalBreakdownVisibility) {
-        if (this.paypalDialog) {
-          executePaypal(this.orderSummary)
-        }
-      }
-    },
-    async closePaypalDialog () {
-      this.dialogPaypal = false
-      await this.$store.dispatch('paypalDialog', false)
     }
   }
 }

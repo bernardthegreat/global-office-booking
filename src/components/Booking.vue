@@ -40,7 +40,6 @@
     </div>
     <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 q-pa-md">
       <available-slots :date="date" :showSlots="showSlots" :showLoading="showLoading"></available-slots>
-      <paypal-buttons v-show="paypalBreakdownVisibility"></paypal-buttons>
     </div>
   </div>
 </template>
@@ -49,9 +48,8 @@
 import { date } from 'quasar'
 import AvailableSlots from './AvailableSlots.vue'
 import { mapGetters } from 'vuex'
-import PaypalButtons from './PaypalButtons.vue'
 export default {
-  components: { AvailableSlots, PaypalButtons },
+  components: { AvailableSlots },
   data () {
     return {
       date: '',
@@ -62,14 +60,8 @@ export default {
   computed: {
     ...mapGetters([
       'loading',
-      'paypalBreakdownVisibility',
       'overallTime'
     ])
-  },
-  watch: {
-    overallTime (val) {
-      this.$store.dispatch('displayPaypalBreakdown', false)
-    }
   },
   created () {
     this.formatDates()
